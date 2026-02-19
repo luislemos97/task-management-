@@ -1,0 +1,18 @@
+@use '@angular/material' as mat;
+
+@include mat.core();
+
+$theme: mat.define-theme((
+  color: (theme-type: light),
+  typography: (),
+  density: (scale: 0)
+));
+
+:root {
+  @include mat.all-component-themes($theme);
+}
+
+html, body { height: 100%; }
+body { margin: 0; }
+.container { max-width: 1100px; margin: 0 auto; padding: 16px; }
+.spacer { flex: 1 1 auto; }

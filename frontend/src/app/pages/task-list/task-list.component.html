@@ -1,0 +1,98 @@
+<mat-toolbar color="primary" class="toolbar">
+    <span class="brand">
+        <span class="brand-title">Gestão de Tarefas</span>
+        <span class="brand-sub">Organize, priorize e entregue</span>
+    </span>
+
+    <span class="spacer"></span>
+
+    <button mat-raised-button class="btn-filter" [matMenuTriggerFor]="statusMenu">
+
+        <mat-icon>filter_alt</mat-icon>
+
+        <span class="btn-filter-label">
+            Status:
+            <b>{{ filterStatus ?? 'Todos' }}</b>
+        </span>
+
+        <mat-icon class="btn-filter-caret">expand_more</mat-icon>
+    </button>
+
+    <mat-menu #statusMenu="matMenu">
+        <button mat-menu-item (click)="onFilter(null)">
+            <mat-icon *ngIf="filterStatus === null">check</mat-icon>
+            <span>Todos</span>
+        </button>
+
+        <button mat-menu-item *ngFor="let s of statuses" (click)="onFilter(s)">
+            <mat-icon *ngIf="filterStatus === s">check</mat-icon>
+            <span>{{ s }}</span>
+        </button>
+    </mat-menu>
+
+    <button mat-raised-button (click)="openCreate()" class="btn-new">
+        <mat-icon>add</mat-icon>
+        Nova tarefa
+    </button>
+
+    <button mat-button (click)="logout()" class="btn-logout">Sair</button>
+</mat-toolbar>
+
+<div class="page">
+    <mat-card class="card">
+        <div class="card-header">
+            <div>
+                <div class="card-title">Tarefas</div>
+                <div class="card-subtitle" *ngIf="!loading">
+                    {{ totalElements }} registro(s)
+                </div>
+                <div class="card-subtitle" *ngIf="loading">Carregando...</div>
+            </div>
+        </div>
+
+        <div class="table-wrap">
+            <table mat-table [dataSource]="tasks" class="table">
+
+                <ng-container matColumnDef="title">
+                    <th mat-header-cell *matHeaderCellDef>Título</th>
+                    <td mat-cell *matCellDef="let t">{{ t.title }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="status">
+                    <th mat-header-cell *matHeaderCellDef>Status</th>
+                    <td mat-cell *matCellDef="let t" class="status-cell">
+                        <mat-select class="status-select" [value]="t.status" [disabled]="savingIds.has(t.id)"
+                            (selectionChange)="changeStatus(t, $event.value)">
+                            <mat-option *ngFor="let s of statuses" [value]="s">{{ s }}</mat-option>
+                        </mat-select>
+                    </td>
+                </ng-container>
+
+                <ng-container matColumnDef="dueDate">
+                    <th mat-header-cell *matHeaderCellDef>Vencimento</th>
+                    <td mat-cell *matCellDef="let t">{{ t.dueDate || '-' }}</td>
+                </ng-container>
+
+                <ng-container matColumnDef="actions">
+                    <th mat-header-cell *matHeaderCellDef>Ações</th>
+                    <td mat-cell *matCellDef="let t" class="actions">
+                        <button mat-button (click)="openEdit(t)" [disabled]="savingIds.has(t.id)">Editar</button>
+                        <button mat-button color="warn" (click)="remove(t)"
+                            [disabled]="savingIds.has(t.id)">Excluir</button>
+                    </td>
+                </ng-container>
+
+                <tr mat-header-row *matHeaderRowDef="cols"></tr>
+                <tr mat-row *matRowDef="let row; columns: cols;"></tr>
+            </table>
+
+            <div class="empty" *ngIf="!loading && tasks.length === 0">
+                Nenhuma tarefa encontrada.
+            </div>
+        </div>
+
+        <mat-paginator [length]="totalElements" [pageIndex]="pageIndex" [pageSize]="pageSize"
+            [pageSizeOptions]="[5, 10, 20]" (page)="onPage($event)">
+        </mat-paginator>
+    </mat-card>
+</div>

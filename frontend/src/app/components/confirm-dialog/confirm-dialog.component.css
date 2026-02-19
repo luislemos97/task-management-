@@ -1,0 +1,43 @@
+.wrap {
+  padding: 6px 2px 2px;
+  min-width: 360px;
+}
+
+.head {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  padding: 8px 8px 4px;
+}
+
+.icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: rgba(0,0,0,.06);
+
+  &.danger {
+    background: rgba(244,67,54,.12);
+  }
+}
+
+.title {
+  font-weight: 800;
+  font-size: 16px;
+  line-height: 1.2;
+}
+
+.msg {
+  margin-top: 4px;
+  opacity: .8;
+  font-size: 13px;
+}
+
+.actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+  padding: 10px 8px 6px;
+}

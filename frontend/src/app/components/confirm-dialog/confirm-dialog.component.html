@@ -1,0 +1,19 @@
+<div class="wrap">
+  <div class="head">
+    <div class="icon" [class.danger]="isDanger">
+      <mat-icon>{{ icon }}</mat-icon>
+    </div>
+
+    <div class="texts">
+      <div class="title">{{ title }}</div>
+      <div class="msg">{{ data.message }}</div>
+    </div>
+  </div>
+
+  <div class="actions" align="end">
+    <button mat-button type="button" (click)="cancel()">{{ cancelText }}</button>
+    <button mat-raised-button type="button" [color]="isDanger ? 'warn' : 'primary'" (click)="confirm()">
+      {{ confirmText }}
+    </button>
+  </div>
+</div>
